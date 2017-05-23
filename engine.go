@@ -7,14 +7,14 @@ import (
 )
 
 type Engine struct {
-	cursorX int
-	cursorY int
+	hero Hero
 }
 
 func NewEngine() *Engine {
+	hero := NewHero()
+
 	return &Engine{
-		cursorX: 0,
-		cursorY: 0,
+		hero: *hero,
 	}
 }
 
@@ -28,7 +28,7 @@ func (e *Engine) Run() error {
 	termbox.SetInputMode(termbox.InputEsc)
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
-	termbox.SetCell(e.cursorX, e.cursorY, '@', termbox.ColorWhite, termbox.ColorDefault)
+	termbox.SetCell(e.hero.xPosition, e.hero.yPosition, '@', termbox.ColorWhite, termbox.ColorDefault)
 	termbox.Flush()
 
 loop:
@@ -38,25 +38,17 @@ loop:
 			if ev.Key == termbox.KeyEsc {
 				break loop
 			}
-			if ev.Key == termbox.KeyArrowUp {
-				termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-				e.cursorY--
-				termbox.SetCell(e.cursorX, e.cursorY, '@', termbox.ColorWhite, termbox.ColorDefault)
-			}
-			if ev.Key == termbox.KeyArrowDown {
-				termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-				e.cursorY++
-				termbox.SetCell(e.cursorX, e.cursorY, '@', termbox.ColorWhite, termbox.ColorDefault)
-			}
 			if ev.Key == termbox.KeyArrowLeft {
-				termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-				e.cursorX--
-				termbox.SetCell(e.cursorX, e.cursorY, '@', termbox.ColorWhite, termbox.ColorDefault)
+				e.hero.Move(0)
+			}
+			if ev.Key == termbox.KeyArrowUp {
+				e.hero.Move(1)
 			}
 			if ev.Key == termbox.KeyArrowRight {
-				termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-				e.cursorX++
-				termbox.SetCell(e.cursorX, e.cursorY, '@', termbox.ColorWhite, termbox.ColorDefault)
+				e.hero.Move(2)
+			}
+			if ev.Key == termbox.KeyArrowDown {
+				e.hero.Move(3)
 			}
 
 			termbox.Flush()
