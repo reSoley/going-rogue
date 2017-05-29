@@ -2,34 +2,33 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/nsf/termbox-go"
 )
 
 type Engine struct {
-	hero Hero
+	view *View
 }
 
 func NewEngine() *Engine {
-	hero := NewHero()
+	err := termbox.Init()
+	if err != nil {
+		fmt.Printf("Failed to initialize termbox-go: %s", err)
+		os.Exit(1)
+	}
+	termbox.SetInputMode(termbox.InputEsc)
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+
+	view := NewView()
 
 	return &Engine{
-		hero: *hero,
+		view: view,
 	}
 }
 
 func (e *Engine) Run() error {
-	err := termbox.Init()
-	if err != nil {
-		return fmt.Errorf("Failed to initialize termbox-go: %s", err)
-	}
 	defer termbox.Close()
-
-	termbox.SetInputMode(termbox.InputEsc)
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-
-	termbox.SetCell(e.hero.xPosition, e.hero.yPosition, '@', termbox.ColorWhite, termbox.ColorDefault)
-	termbox.Flush()
 
 loop:
 	for {
@@ -38,20 +37,8 @@ loop:
 			if ev.Key == termbox.KeyEsc {
 				break loop
 			}
-			if ev.Key == termbox.KeyArrowLeft {
-				e.hero.Move(0)
-			}
-			if ev.Key == termbox.KeyArrowUp {
-				e.hero.Move(1)
-			}
-			if ev.Key == termbox.KeyArrowRight {
-				e.hero.Move(2)
-			}
-			if ev.Key == termbox.KeyArrowDown {
-				e.hero.Move(3)
-			}
 
-			termbox.Flush()
+			e.view.processKeyInput(ev.Ch)
 		}
 	}
 

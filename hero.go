@@ -9,15 +9,18 @@ type Hero struct {
 	yPosition int
 }
 
-func NewHero() *Hero {
+func NewHero(xPosition, yPosition int) *Hero {
+	termbox.SetCell(xPosition, yPosition, '@', termbox.ColorWhite, termbox.ColorDefault)
+	termbox.Flush()
+
 	return &Hero{
-		xPosition: 0,
-		yPosition: 0,
+		xPosition: xPosition,
+		yPosition: yPosition,
 	}
 }
 
 func (h *Hero) Move(direction int) {
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+	termbox.SetCell(h.xPosition, h.yPosition, ' ', termbox.ColorWhite, termbox.ColorDefault)
 
 	switch direction {
 	case 0:
@@ -31,5 +34,4 @@ func (h *Hero) Move(direction int) {
 	}
 
 	termbox.SetCell(h.xPosition, h.yPosition, '@', termbox.ColorWhite, termbox.ColorDefault)
-	termbox.Flush()
 }
