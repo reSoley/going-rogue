@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/nsf/termbox-go"
 )
 
@@ -10,9 +12,9 @@ type View struct {
 	termHeight int
 }
 
-func NewView() *View {
+func newView() *View {
 	width, height := termbox.Size()
-	hero := NewHero(width/2, height/2)
+	hero := newHero(width/2, height/2)
 
 	return &View{
 		hero:       hero,
@@ -21,21 +23,31 @@ func NewView() *View {
 	}
 }
 
-func (v *View) Render() {
-	termbox.Flush()
-}
-
-func (v *View) processKeyInput(input rune) {
-	switch input {
-	case 'a':
-		v.hero.Move(0)
-	case 'w':
-		v.hero.Move(1)
-	case 'd':
-		v.hero.Move(2)
-	case 's':
-		v.hero.Move(3)
+func (v *View) render() error {
+	err := termbox.Flush()
+	if err != nil {
+		return fmt.Errorf("Error flushing termbox buffer: %s", err)
 	}
 
-	v.Render()
+	return nil
+}
+
+func (v *View) processKeyInput(input rune) error {
+	switch input {
+	case 'a':
+		v.hero.move(0)
+	case 'w':
+		v.hero.move(1)
+	case 'd':
+		v.hero.move(2)
+	case 's':
+		v.hero.move(3)
+	}
+
+	err := v.render()
+	if err != nil {
+		return fmt.Errorf("Error processing keystroke input: %s", err)
+	}
+
+	return nil
 }

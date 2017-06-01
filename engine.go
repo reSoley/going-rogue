@@ -20,7 +20,7 @@ func NewEngine() *Engine {
 	termbox.SetInputMode(termbox.InputEsc)
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
-	view := NewView()
+	view := newView()
 
 	return &Engine{
 		view: view,
@@ -29,6 +29,7 @@ func NewEngine() *Engine {
 
 func (e *Engine) Run() error {
 	defer termbox.Close()
+	e.view.render()
 
 loop:
 	for {
@@ -38,7 +39,10 @@ loop:
 				break loop
 			}
 
-			e.view.processKeyInput(ev.Ch)
+			err := e.view.processKeyInput(ev.Ch)
+			if err != nil {
+				return fmt.Errorf("Error running engine: %s", err)
+			}
 		}
 	}
 
