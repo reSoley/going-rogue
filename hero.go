@@ -1,36 +1,36 @@
 package main
 
-import (
-	"github.com/nsf/termbox-go"
-)
+import ()
 
 type Hero struct {
 	xPosition int
 	yPosition int
 }
 
-func newHero(xPosition, yPosition int) *Hero {
-	termbox.SetCell(xPosition, yPosition, '@', termbox.ColorWhite, termbox.ColorDefault)
-
+func newHero(x, y int) *Hero {
 	return &Hero{
-		xPosition: xPosition,
-		yPosition: yPosition,
+		xPosition: x,
+		yPosition: y,
 	}
 }
 
-func (h *Hero) move(direction int) {
-	termbox.SetCell(h.xPosition, h.yPosition, ' ', termbox.ColorWhite, termbox.ColorDefault)
-
+func (h *Hero) move(direction rune) {
 	switch direction {
-	case 0:
-		h.xPosition--
-	case 1:
-		h.yPosition--
-	case 2:
-		h.xPosition++
-	case 3:
-		h.yPosition++
+	case 'a':
+		if h.xPosition > 0 {
+			h.xPosition--
+		}
+	case 'w':
+		if h.yPosition > 0 {
+			h.yPosition--
+		}
+	case 'd':
+		if h.xPosition < ViewWidth-1 {
+			h.xPosition++
+		}
+	case 's':
+		if h.yPosition < ViewHeight-1 {
+			h.yPosition++
+		}
 	}
-
-	termbox.SetCell(h.xPosition, h.yPosition, '@', termbox.ColorWhite, termbox.ColorDefault)
 }
