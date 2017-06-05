@@ -3,15 +3,21 @@ package main
 import ()
 
 type Hero struct {
-	xPosition int
-	yPosition int
+	xPosition  int
+	yPosition  int
+	standingOn rune
 }
 
 func newHero(x, y int) *Hero {
 	return &Hero{
-		xPosition: x,
-		yPosition: y,
+		xPosition:  x,
+		yPosition:  y,
+		standingOn: '.',
 	}
+}
+
+func (h *Hero) setStandingOn(standingOn rune) {
+	h.standingOn = standingOn
 }
 
 func (h *Hero) move(direction rune) {

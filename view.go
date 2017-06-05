@@ -12,27 +12,32 @@ const (
 )
 
 type View struct {
-	buffer     [ViewWidth][ViewHeight]*Tile
+	buffer     [ViewWidth][ViewHeight]rune
+	floor      *Floor
 	hero       *Hero
 	termWidth  int
 	termHeight int
 }
 
 func newView() *View {
-	var buffer [ViewWidth][ViewHeight]*Tile
+	var buffer [ViewWidth][ViewHeight]rune
 	for x, yBuffer := range buffer {
 		for y, _ := range yBuffer {
-			buffer[x][y] = newTile()
+			buffer[x][y] = '.'
 		}
 	}
 
+	// floor := newFloor(buffer)
+	// floor.drawRoom(5, 2, 6, 6)
+
 	hero := newHero(ViewWidth/2, ViewHeight/2)
-	buffer[hero.xPosition][hero.yPosition].set('@')
+	buffer[hero.xPosition][hero.yPosition] = '@'
 
 	width, height := termbox.Size()
 
 	return &View{
-		buffer:     buffer,
+		buffer: buffer,
+		// floor:      floor,
 		hero:       hero,
 		termWidth:  width,
 		termHeight: height,
@@ -41,8 +46,8 @@ func newView() *View {
 
 func (v *View) render() error {
 	for x, yBuffer := range v.buffer {
-		for y, tile := range yBuffer {
-			termbox.SetCell(x, y, tile.cur, termbox.ColorWhite, termbox.ColorDefault)
+		for y, cur := range yBuffer {
+			termbox.SetCell(x, y, cur, termbox.ColorWhite, termbox.ColorDefault)
 		}
 	}
 
@@ -57,9 +62,10 @@ func (v *View) render() error {
 func (v *View) processKeyInput(input rune) error {
 	switch input {
 	case 'a', 'w', 'd', 's':
-		v.buffer[v.hero.xPosition][v.hero.yPosition].revert()
+		v.buffer[v.hero.xPosition][v.hero.yPosition] = v.hero.standingOn
 		v.hero.move(input)
-		v.buffer[v.hero.xPosition][v.hero.yPosition].set('@')
+		v.hero.setStandingOn(v.buffer[v.hero.xPosition][v.hero.yPosition])
+		v.buffer[v.hero.xPosition][v.hero.yPosition] = '@'
 	}
 
 	err := v.render()
