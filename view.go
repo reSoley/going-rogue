@@ -23,12 +23,12 @@ func newView() *View {
 	var buffer [ViewWidth][ViewHeight]rune
 	for x, yBuffer := range buffer {
 		for y, _ := range yBuffer {
-			buffer[x][y] = '.'
+			buffer[x][y] = ' '
 		}
 	}
 
-	// floor := newFloor(buffer)
-	// floor.drawRoom(5, 2, 6, 6)
+	floor := newFloor(buffer[:])
+	floor.drawRoom(3, 2, 14, 6)
 
 	hero := newHero(ViewWidth/2, ViewHeight/2)
 	buffer[hero.xPosition][hero.yPosition] = '@'
@@ -36,8 +36,7 @@ func newView() *View {
 	width, height := termbox.Size()
 
 	return &View{
-		buffer: buffer,
-		// floor:      floor,
+		buffer:     buffer,
 		hero:       hero,
 		termWidth:  width,
 		termHeight: height,
