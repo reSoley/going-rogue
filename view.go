@@ -12,34 +12,20 @@ const (
 )
 
 type View struct {
-	buffer     [ViewWidth][ViewHeight]rune
-	floor      *Floor
-	hero       *Hero
-	termWidth  int
-	termHeight int
+	screenBuffer [ViewWidth][ViewHeight]rune
 }
 
 func newView() *View {
 	var buffer [ViewWidth][ViewHeight]rune
-	for x, yBuffer := range buffer {
+
+	for x, yBuffer := range screenBuffer {
 		for y, _ := range yBuffer {
-			buffer[x][y] = ' '
+			screenBuffer[x][y] = ' '
 		}
 	}
 
-	floor := newFloor(buffer[:])
-	floor.drawRoom(3, 2, 14, 6)
-
-	hero := newHero(ViewWidth/2, ViewHeight/2)
-	buffer[hero.xPosition][hero.yPosition] = '@'
-
-	width, height := termbox.Size()
-
 	return &View{
-		buffer:     buffer,
-		hero:       hero,
-		termWidth:  width,
-		termHeight: height,
+		screenBuffer: screenBuffer,
 	}
 }
 
@@ -53,23 +39,6 @@ func (v *View) render() error {
 	err := termbox.Flush()
 	if err != nil {
 		return fmt.Errorf("Error flushing termbox buffer: %s", err)
-	}
-
-	return nil
-}
-
-func (v *View) processKeyInput(input rune) error {
-	switch input {
-	case 'a', 'w', 'd', 's':
-		v.buffer[v.hero.xPosition][v.hero.yPosition] = v.hero.standingOn
-		v.hero.move(input)
-		v.hero.setStandingOn(v.buffer[v.hero.xPosition][v.hero.yPosition])
-		v.buffer[v.hero.xPosition][v.hero.yPosition] = '@'
-	}
-
-	err := v.render()
-	if err != nil {
-		return fmt.Errorf("Error processing keystroke input: %s", err)
 	}
 
 	return nil
