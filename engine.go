@@ -7,11 +7,18 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+const (
+	viewWidth  = 20
+	viewHeight = 10
+)
+
 type Engine struct {
-	view *View
+	controller *Controller
+	view       *View
+	goingRogue *GoingRogue
 }
 
-func NewEngine() *Engine {
+func newEngine() *Engine {
 	err := termbox.Init()
 	if err != nil {
 		fmt.Printf("Failed to initialize termbox-go: %s", err)
@@ -20,14 +27,18 @@ func NewEngine() *Engine {
 	termbox.SetInputMode(termbox.InputEsc)
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
+	controller := newController()
 	view := newView()
+	goingRogue := newGoingRogue(view.screenBuffer[:])
 
 	return &Engine{
-		view: view,
+		controller: controller,
+		view:       view,
+		goingRogue: goingRogue,
 	}
 }
 
-func (e *Engine) Run() error {
+func (e *Engine) run() error {
 	defer termbox.Close()
 	e.view.render()
 
@@ -39,12 +50,17 @@ loop:
 				break loop
 			}
 
-			err := e.view.processKeyInput(ev.Ch)
-			if err != nil {
-				return fmt.Errorf("Error running engine: %s", err)
+			if ev.Ch == 'u' {
+				e.goingRogue.update()
+				e.view.render()
 			}
 		}
 	}
 
 	return nil
+}
+
+func main() {
+	e := newEngine()
+	e.run()
 }

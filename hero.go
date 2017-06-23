@@ -1,5 +1,6 @@
 package main
 
+/*
 import ()
 
 type Hero struct {
@@ -40,3 +41,4 @@ func (h *Hero) move(direction rune) {
 		}
 	}
 }
+*/

@@ -1,5 +1,6 @@
 package main
 
+/*
 import ()
 
 type Floor struct {
@@ -27,3 +28,4 @@ func (f *Floor) drawRoom(x, y, width, height int) {
 		}
 	}
 }
+*/

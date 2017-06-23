@@ -6,17 +6,12 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-const (
-	ViewWidth  = 20
-	ViewHeight = 10
-)
-
 type View struct {
-	screenBuffer [ViewWidth][ViewHeight]rune
+	screenBuffer [viewWidth][viewHeight]rune
 }
 
 func newView() *View {
-	var buffer [ViewWidth][ViewHeight]rune
+	var screenBuffer [viewWidth][viewHeight]rune
 
 	for x, yBuffer := range screenBuffer {
 		for y, _ := range yBuffer {
@@ -30,7 +25,7 @@ func newView() *View {
 }
 
 func (v *View) render() error {
-	for x, yBuffer := range v.buffer {
+	for x, yBuffer := range v.screenBuffer {
 		for y, cur := range yBuffer {
 			termbox.SetCell(x, y, cur, termbox.ColorWhite, termbox.ColorDefault)
 		}
