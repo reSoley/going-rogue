@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import ()
 
 type Controller struct {
 	bindings map[rune]func()
@@ -16,14 +14,8 @@ func newController() *Controller {
 	}
 }
 
-func (c *Controller) bind(key rune, function func()) error {
-	if _, has := c.bindings[key]; has {
-		return fmt.Errorf("Key %c is already bound.", key)
-	}
-
+func (c *Controller) bind(key rune, function func()) {
 	c.bindings[key] = function
-
-	return nil
 }
 
 func (c *Controller) processKey(key rune) {

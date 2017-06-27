@@ -15,7 +15,7 @@ func newView() *View {
 
 	for x, yBuffer := range screenBuffer {
 		for y, _ := range yBuffer {
-			screenBuffer[x][y] = ' '
+			screenBuffer[x][y] = '.'
 		}
 	}
 
@@ -26,8 +26,8 @@ func newView() *View {
 
 func (v *View) render() error {
 	for x, yBuffer := range v.screenBuffer {
-		for y, cur := range yBuffer {
-			termbox.SetCell(x, y, cur, termbox.ColorWhite, termbox.ColorDefault)
+		for y, _ := range yBuffer {
+			termbox.SetCell(x, y, v.screenBuffer[x][y], termbox.ColorWhite, termbox.ColorDefault)
 		}
 	}
 

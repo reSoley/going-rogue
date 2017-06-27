@@ -29,7 +29,7 @@ func newEngine() *Engine {
 
 	controller := newController()
 	view := newView()
-	goingRogue := newGoingRogue(view.screenBuffer[:])
+	goingRogue := newGoingRogue(view.screenBuffer[:], controller)
 
 	return &Engine{
 		controller: controller,
@@ -50,10 +50,8 @@ loop:
 				break loop
 			}
 
-			if ev.Ch == 'u' {
-				e.goingRogue.update()
-				e.view.render()
-			}
+			e.controller.processKey(ev.Ch)
+			e.view.render()
 		}
 	}
 

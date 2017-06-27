@@ -1,19 +1,18 @@
 package main
 
 type GoingRogue struct {
-	viewSlice [][viewHeight]rune
+	hero *Creature
 }
 
-func newGoingRogue(viewSlice [][viewHeight]rune) *GoingRogue {
+func newGoingRogue(viewSlice [][viewHeight]rune, controller *Controller) *GoingRogue {
+	hero := newCreature(viewWidth/2, viewHeight/2, '.', viewSlice)
+
+	controller.bind('a', hero.moveLeft)
+	controller.bind('w', hero.moveUp)
+	controller.bind('d', hero.moveRight)
+	controller.bind('s', hero.moveDown)
+
 	return &GoingRogue{
-		viewSlice: viewSlice,
-	}
-}
-
-func (g *GoingRogue) update() {
-	for x, yBuf := range g.viewSlice {
-		for y, _ := range yBuf {
-			g.viewSlice[x][y] = '.'
-		}
+		hero: hero,
 	}
 }
