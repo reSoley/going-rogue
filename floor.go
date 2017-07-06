@@ -63,7 +63,21 @@ func newFloor(buffer [][viewHeight]rune) *Floor {
 	}
 }
 
-func (f *Floor) drawRoom(room *Room, xPosition, yPosition, height, width int) {
+func (f *Floor) drawRooms() {
+	widthStep := viewWidth / 3
+	heightStep := viewHeight / 3
+
+	for i, room := range f.rooms {
+		if room != nil {
+			xPosition := (i / 3) * widthStep
+			yPosition := (i % 3) * heightStep
+			f.drawRoom(xPosition, yPosition, widthStep, heightStep)
+		}
+	}
+}
+
+func (f *Floor) drawRoom(xPosition, yPosition, width, height int) {
+	f.buffer[xPosition][yPosition] = '+'
 }
 
 func getValidNeighbors(room int) []int {
