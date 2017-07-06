@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	viewWidth  = 20
-	viewHeight = 10
+	viewWidth  = 90
+	viewHeight = 24
 )
 
 type Engine struct {

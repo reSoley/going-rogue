@@ -24,19 +24,19 @@ func newRoom() *Room {
 }
 
 type Floor struct {
-	buffer [][ViewHeight]rune
+	buffer [][viewHeight]rune
 	rooms  [floorSize]*Room
 }
 
-func newFloor(buffer [][ViewHeight]rune) *Floor {
+func newFloor(buffer [][viewHeight]rune) *Floor {
 	var rooms [floorSize]*Room
 	var queue []int
 
 	viewed := make(map[int]bool)
-	start := rand.Intn(gridSize)
+	start := rand.Intn(floorSize)
 	queue = append(queue, start)
 
-	pathPercent = maxPathPercent
+	pathPercent := maxPathPercent
 
 	for numRooms := 0; len(queue) > 0 && numRooms < maxNumRooms; numRooms++ {
 		cur := queue[0]
@@ -48,7 +48,7 @@ func newFloor(buffer [][ViewHeight]rune) *Floor {
 		for _, validNeighbor := range getValidNeighbors(cur) {
 			if _, has := viewed[validNeighbor]; !has && rand.Intn(10) < pathPercent {
 				queue = append(queue, validNeighbor)
-				nodes[cur].neighbors = append(nodes[cur].neighbors, validNeighbor)
+				rooms[cur].neighbors = append(rooms[cur].neighbors, validNeighbor)
 			}
 
 			if pathPercent > minPathPercent {
@@ -61,6 +61,9 @@ func newFloor(buffer [][ViewHeight]rune) *Floor {
 		buffer: buffer,
 		rooms:  rooms,
 	}
+}
+
+func (f *Floor) drawRoom(room *Room, xPosition, yPosition, height, width int) {
 }
 
 func getValidNeighbors(room int) []int {
