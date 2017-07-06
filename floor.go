@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"time"
 )
 
 const (
@@ -31,6 +32,8 @@ type Floor struct {
 func newFloor(buffer [][viewHeight]rune) *Floor {
 	var rooms [floorSize]*Room
 	var queue []int
+
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	viewed := make(map[int]bool)
 	start := rand.Intn(floorSize)
