@@ -79,8 +79,30 @@ func (f *Floor) drawRooms() {
 	}
 }
 
-func (f *Floor) drawRoom(xPosition, yPosition, width, height int) {
-	f.buffer[xPosition][yPosition] = '+'
+// Not super readable, needs cleanup
+// Possibly weight rand calls to make rooms favor larger sizes
+func (f *Floor) drawRoom(xPosition, yPosition, maxWidth, maxHeight int) {
+	roomWidth := randRange(4, maxWidth-1)
+	roomHeight := randRange(4, maxHeight-1)
+	roomXPosition := randRange(xPosition+1, xPosition+maxWidth-roomWidth)
+	roomYPosition := randRange(yPosition+1, yPosition+maxHeight-roomHeight)
+
+	for i := roomXPosition; i < roomXPosition+roomWidth; i++ {
+		for j := roomYPosition; j < roomYPosition+roomHeight; j++ {
+			if j == roomYPosition || j == roomYPosition+roomHeight-1 {
+				f.buffer[i][j] = '-'
+			} else if i == roomXPosition || i == roomXPosition+roomWidth-1 {
+				f.buffer[i][j] = '|'
+			} else {
+				f.buffer[i][j] = '.'
+			}
+		}
+	}
+}
+
+// May be more useful in some uitlities file
+func randRange(min, max int) int {
+	return rand.Intn(max-min) + min
 }
 
 func getValidNeighbors(room int) []int {

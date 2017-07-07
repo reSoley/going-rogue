@@ -15,7 +15,7 @@ func newView() *View {
 
 	for x, yBuffer := range screenBuffer {
 		for y, _ := range yBuffer {
-			screenBuffer[x][y] = '.'
+			screenBuffer[x][y] = ' '
 		}
 	}
 

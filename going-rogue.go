@@ -5,9 +5,9 @@ type GoingRogue struct {
 }
 
 func newGoingRogue(viewSlice [][viewHeight]rune, controller *Controller) *GoingRogue {
-	hero := newCreature(viewWidth/2, viewHeight/2, '.', viewSlice)
 	floor := newFloor(viewSlice)
 	floor.drawRooms()
+	hero := newCreature(viewWidth/2, viewHeight/2, '.', viewSlice)
 
 	controller.bind('a', hero.moveLeft)
 	controller.bind('w', hero.moveUp)
